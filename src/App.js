@@ -13,8 +13,6 @@ function App() {
     }
   ]);
   const [dataload,setDataload] = useState(false);
-  const [colorSelectValue, setColorSelectValue] = useState(''); // State for the new color select box
-
 
   const handleChange = (e) => {
     setSelectedBox(parseInt(e.target.value)); // Parse the value to an integer
@@ -44,6 +42,8 @@ function App() {
   };
 };
   const handleUploadToCloud = async () => {
+    const confirmation = window.confirm("Are you sure you want to upload the boxes to the cloud?");
+    if (confirmation) {
       try{
           await axios.post('http://localhost:3001/upload', { boxes });
           //handle success e.g, show success notification
@@ -54,6 +54,8 @@ function App() {
 
       }
   }
+};
+
   // Fetch the boxes from the database
   const fetchBoxes = async () => {   // Fetch the boxes from the database
     try {
@@ -70,12 +72,40 @@ function App() {
     }
   }
 
-  // Fetch the boxes from the database 
+  const handleSwapValues = () => {
+    const indexA = prompt(`Enter the index of the first box (between 0 and ${boxes.length - 1}):`);  
+    const indexB = prompt(`Enter the index of the second box (between 0 and ${boxes.length - 1}):`);
+    // Convert the input to integers
+    const intIndexA = parseInt(indexA);
+    const intIndexB = parseInt(indexB);
+  
+    // Check if the inputs are valid
+    if (isNaN(intIndexA) || isNaN(intIndexB) || intIndexA < 0 || intIndexB < 0 || intIndexA >= boxes.length || intIndexB >= boxes.length) {
+      alert("Invalid input. Please enter valid indices.");
+      return;
+    }
+  
+    const confirmation = window.confirm(`Are you sure you want to swap the values of Box ${intIndexA} and Box ${intIndexB}?`);
+    if (confirmation) {
+      setBoxes((prevBoxes) => {
+        const newBoxes = [...prevBoxes];
+        const tempColorValue = newBoxes[intIndexA].colorValue;
+        newBoxes[intIndexA] = { ...newBoxes[intIndexA], colorValue: newBoxes[intIndexB].colorValue };
+        newBoxes[intIndexB] = { ...newBoxes[intIndexB], colorValue: tempColorValue };
+        return newBoxes;
+      });
+
+      // uploadd to cloud using handleUploadToCloud function
+  
+    }
+  };
+  
+ // Fetch the boxes from the database 
   // the use of the useEffect hook ensures that the fetchBoxes function is called only once
   // it protects us from an infinite loop
-  // useEffect(() => {
-  //   fetchBoxes(); // Fetch the boxes from the database
-  // }, []);
+  useEffect(() => {
+    fetchBoxes(); // Fetch the boxes from the database
+  }, []);
 
   
 
@@ -86,7 +116,8 @@ function App() {
         Change Color
       </button>
       <button onClick={handleUploadToCloud}>Upload to Cloud</button>
-      <button onClick={fetchBoxes}>Fetch Boxes</button>
+      {/* <button onClick={fetchBoxes}>Fetch Boxes</button> */}
+      <button onClick={handleSwapValues}>Swap Values</button>
 
       <Input
         colorValue={colorValue}
@@ -112,7 +143,6 @@ function App() {
           </option>
         ))}
       </select>
-
 
       {boxes.map((box) => (
         <Square key={box.key} colorValue={box.colorValue} index={box.key}/>
