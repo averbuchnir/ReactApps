@@ -67,6 +67,7 @@ function App() {
       console.error('fetch failed',err.message)
     }
   }
+
   // Fetch the boxes from the database 
   // the use of the useEffect hook ensures that the fetchBoxes function is called only once
   // it protects us from an infinite loop
@@ -74,6 +75,7 @@ function App() {
   //   fetchBoxes(); // Fetch the boxes from the database
   // }, []);
 
+  
 
   return (
     <div className='Square-Container'>
