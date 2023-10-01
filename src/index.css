@@ -74,3 +74,10 @@ button {
   box-shadow: 2px 2px 5px #000;
   padding: 0.25rem;
 }
+
+/* For screens smaller than 768px */
+@media screen and (max-width: 768px) {
+  .square {
+    width: 100%; /* Make squares take up the full width */
+  }
+}

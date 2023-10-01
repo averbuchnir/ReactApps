@@ -31,6 +31,8 @@ function App() {
   };
 
   const handleColorChange = () => {
+    const confirmation = window.confirm("Are you sure you want to change the color of this box?");
+    if(confirmation){
     setBoxes((prevBoxes) => {
       return prevBoxes.map((box) => {
         if (box.key === selectedBox) {
@@ -40,7 +42,7 @@ function App() {
       });
     });
   };
-
+};
   const handleUploadToCloud = async () => {
       try{
           await axios.post('http://localhost:3001/upload', { boxes });
