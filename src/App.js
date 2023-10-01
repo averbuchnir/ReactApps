@@ -111,21 +111,6 @@ function App() {
         ))}
       </select>
 
-      <select 
-      value={colorSelectValue}
-      onChange={(e)=> setColorSelectValue(e.target.value)}
-      >
-        <option value=''> available values</option>
-        {boxes.map((box) => (
-            <option key={box.key} value={box.colorValue}>
-              {box.colorValue}
-            </option>
-        ))}
-
-      </select>
-
-
-
 
       {boxes.map((box) => (
         <Square key={box.key} colorValue={box.colorValue} index={box.key}/>
